@@ -1,32 +1,27 @@
 <?php
 header("Content-Type:application/json");
-if (isset($_GET['order_id']) && $_GET['order_id']!="") {
+if (isset($_GET['id']) && $_GET['id']!="") {
  include('db.php');
- $order_id = $_GET['order_id'];
+ $id = $_GET['id'];
  $result = mysqli_query(
  $con,
- "SELECT * FROM `transactions` WHERE order_id=$order_id");
+ "SELECT * FROM `transactions` WHERE id=$id");
  if(mysqli_num_rows($result)>0){
  $row = mysqli_fetch_array($result);
- $amount = $row['amount'];
- $response_code = $row['response_code'];
- $response_desc = $row['response_desc'];
- response($order_id, $amount, $response_code,$response_desc);
+ $name = $row['name'];
+ response($id, $name);
  mysqli_close($con);
  }else{
- response(NULL, NULL, 200,"No Record Found");
+ response(NULL, NULL);
  }
 }else{
- response(NULL, NULL, 400,"Invalid Request");
+ response(NULL, NULL);
  }
- 
-function response($order_id,$amount,$response_code,$response_desc){
- $response['order_id'] = $order_id;
- $response['amount'] = $amount;
- $response['response_code'] = $response_code;
- $response['response_desc'] = $response_desc;
- 
+function response($id,$name,$response_code,$response_desc){
+ $response['id'] = $id;
+ $response['name'] = $name;
  $json_response = json_encode($response);
  echo $json_response;
 }
 ?>
+
